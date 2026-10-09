@@ -1,0 +1,7 @@
+# Только файлы сайта; базы, картинки и архивы не публикуются
+*
+!.gitignore
+!index.html
+!styles.css
+!script.js
+!artilleria-logo.png
