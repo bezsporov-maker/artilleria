@@ -2,7 +2,7 @@ const menuToggle = document.querySelector(".menu-toggle");
 const siteNav = document.querySelector("#site-nav");
 const contactForm = document.querySelector("#contact-form");
 const formNote = document.querySelector("#form-note");
-const contactEmail = "";
+const contactEmail = "d.rusakov@artilleria.ru";
 
 menuToggle.addEventListener("click", () => {
   const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
