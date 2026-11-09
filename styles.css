@@ -1009,8 +1009,8 @@ p {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   grid-template-areas:
-    "intro form"
-    "channels form";
+    "intro channels"
+    "form channels";
   align-items: start;
   gap: 24px clamp(24px, 5vw, 72px);
   padding: 52px 7%;
