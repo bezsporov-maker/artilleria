@@ -247,12 +247,10 @@ p {
 }
 
 .hero-note {
-  position: absolute;
-  bottom: 106px;
-  left: 0;
+  margin: 16px 0 0;
   color: var(--muted);
-  font-size: 10px;
-  line-height: 1.75;
+  font-size: 12px;
+  line-height: 1.5;
 }
 
 .hero-note > span {
@@ -1201,10 +1199,6 @@ p {
     margin-right: -25px;
   }
 
-  .hero-note {
-    bottom: 99px;
-  }
-
   .service-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1358,13 +1352,6 @@ p {
     width: min(88vw, 360px);
     justify-self: center;
     margin: 35px 0 5px;
-  }
-
-  .hero-note {
-    right: 0;
-    bottom: 71px;
-    left: auto;
-    text-align: right;
   }
 
   .hero-bottom {
