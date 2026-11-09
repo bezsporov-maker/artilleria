@@ -1007,9 +1007,13 @@ p {
 
 .contact {
   display: grid;
-  grid-template-columns: 1fr 0.8fr;
-  gap: 12%;
-  padding: 65px 7%;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-areas:
+    "intro form"
+    "channels form";
+  align-items: start;
+  gap: 24px clamp(24px, 5vw, 72px);
+  padding: 52px 7%;
   background: var(--blue-dark);
   color: #fff;
 }
@@ -1031,18 +1035,27 @@ p {
   color: var(--lime);
 }
 
-.contact-copy > p:last-child {
-  max-width: 330px;
-  margin-top: 18px;
+.contact-copy {
+  grid-area: intro;
+}
+
+.contact-intro {
+  max-width: 40ch;
+  margin: 12px 0 0;
   color: #c1d1d2;
-  font-size: 10px;
-  line-height: 1.9;
+  font-size: 14px;
+  line-height: 1.55;
 }
 
 .contact-form {
+  grid-area: form;
   display: grid;
-  gap: 10px;
-  margin-top: 24px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  padding: clamp(14px, 2.4vw, 28px);
+  border: 1px solid rgb(255 255 255 / 24%);
+  border-radius: 8px;
+  background: rgb(255 255 255 / 4%);
   font-size: 14px;
 }
 
@@ -1216,7 +1229,6 @@ p {
   }
 
   .contact {
-    gap: 8%;
     padding-inline: 6%;
   }
 }
@@ -1467,13 +1479,9 @@ p {
   }
 
   .contact {
-    grid-template-columns: 1fr;
-    gap: 24px;
-    padding: 37px 21px 27px;
-  }
-
-  .contact-copy > p:last-child {
-    max-width: 290px;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "intro" "form" "channels";
+    padding: 32px 18px 26px;
   }
 
   .site-footer {
@@ -1497,6 +1505,7 @@ p {
 
 /* Прямые каналы связи */
 .contact-channels {
+  grid-area: channels;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -1620,13 +1629,11 @@ p {
   right: 16px;
   bottom: 16px;
   left: 16px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px 24px;
-  width: min(680px, 100% - 32px);
+  display: grid;
+  gap: 8px;
+  width: min(360px, 100% - 32px);
   margin-left: auto;
-  padding: 16px;
+  padding: 12px 14px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--paper);
@@ -1638,14 +1645,14 @@ p {
 }
 
 .analytics-banner h2 {
-  margin: 0 0 6px;
-  font-size: 18px;
+  margin: 0 0 4px;
+  font-size: 15px;
 }
 
 .analytics-banner p {
   margin: 0;
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 12px;
+  line-height: 1.45;
 }
 
 .analytics-actions {
@@ -1655,8 +1662,9 @@ p {
 }
 
 .analytics-actions button {
-  min-height: 44px;
-  padding: 8px 14px;
+  min-height: 36px;
+  padding: 5px 10px;
+  font-size: 12px;
   border: 1px solid var(--blue-dark);
   border-radius: 4px;
   background: var(--paper);
