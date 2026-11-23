@@ -70,7 +70,11 @@ try {
   const saved = JSON.parse(localStorage.getItem(analyticsPreference));
   if (saved && saved.expires > Date.now()) analyticsChoice = saved.choice;
 } catch {
-  // Analytics stays off when the saved preference cannot be read.
+  // If storage is unavailable, use the default for this language version.
+}
+
+function analyticsEnabled() {
+  return analyticsChoice === "allow" || (isEnglish && analyticsChoice !== "reject");
 }
 
 function startAnalytics() {
@@ -95,7 +99,6 @@ function startAnalytics() {
 }
 
 function setAnalyticsChoice(choice) {
-  const wasAllowed = analyticsChoice === "allow";
   analyticsChoice = choice;
   try {
     localStorage.setItem(analyticsPreference, JSON.stringify({
@@ -111,7 +114,7 @@ function setAnalyticsChoice(choice) {
   openedFromSettings = false;
   if (choice === "allow") {
     startAnalytics();
-  } else if (wasAllowed) {
+  } else {
     window[`disableYaCounter${counterId}`] = true;
   }
 }
@@ -125,15 +128,14 @@ analyticsSettings.addEventListener("click", () => {
 rejectAnalytics.addEventListener("click", () => setAnalyticsChoice("reject"));
 acceptAnalytics.addEventListener("click", () => setAnalyticsChoice("allow"));
 
-if (analyticsChoice === "allow") {
-  startAnalytics();
-} else if (analyticsChoice !== "reject") {
+if (analyticsEnabled()) startAnalytics();
+if (analyticsChoice !== "allow" && analyticsChoice !== "reject") {
   analyticsBanner.hidden = false;
 }
 
 document.addEventListener("click", (event) => {
   const link = event.target.closest("[data-goal]");
-  if (link && analyticsChoice === "allow" && typeof window.ym === "function") {
+  if (link && analyticsEnabled() && typeof window.ym === "function") {
     window.ym(counterId, "reachGoal", link.dataset.goal);
   }
 });
