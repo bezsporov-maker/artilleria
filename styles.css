@@ -1695,3 +1695,28 @@ p {
 .legal-page p {
   margin: 0 0 14px;
 }
+
+/* Language choice remains visible when mobile navigation is closed. */
+.language-switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  margin-right: 28px;
+  font-size: calc(12px * var(--font-scale));
+  font-weight: 700;
+}
+.language-switch [aria-current] { color: var(--ink); border-bottom: 2px solid var(--ink); }
+.language-switch a { color: #53636b; text-decoration: none; padding-block: 10px; }
+.language-switch a:hover { color: #0a8ebc; }
+.language-switch a:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+html[lang="en"] .hero h1 { font-size: calc(clamp(48px, 5.6vw, 76px) * var(--font-scale)); }
+html[lang="en"] .contact h2 { font-size: calc(clamp(40px, 4.7vw, 64px) * var(--font-scale)); }
+@media (max-width: 900px) {
+  .language-switch { margin-right: 18px; margin-left: 12px; gap: 8px; }
+  .site-nav { gap: 14px; }
+}
+@media (max-width: 640px) {
+  .language-switch { margin-left: auto; margin-right: 18px; }
+  html[lang="en"] .hero h1 { font-size: calc(clamp(42px, 11vw, 60px) * var(--font-scale)); }
+}

@@ -1,17 +1,32 @@
+const isEnglish = document.documentElement.lang === "en";
+const formCopy = isEnglish ? {
+  openMenu: "Open menu", closeMenu: "Close menu",
+  required: "Please briefly describe your project.",
+  subject: "Project enquiry from the Artilleria website",
+  consent: "I consent to Individual Entrepreneur Dmitry Nikolaevich Rusakov processing my personal data to respond to this enquiry (version 1): https://bezsporov-maker.github.io/artilleria/en/consent.html",
+  fallback: "If your email app did not open, email d.rusakov@artilleria.ru."
+} : {
+  openMenu: "Открыть меню", closeMenu: "Закрыть меню",
+  required: "Коротко опишите вашу задачу.",
+  subject: "Заявка с сайта «Артиллерия»",
+  consent: "Даю ИП Русакову Дмитрию Николаевичу согласие на обработку моих персональных данных для ответа на это обращение (редакция 1): https://bezsporov-maker.github.io/artilleria/consent.html",
+  fallback: "Если почтовое приложение не открылось, напишите на d.rusakov@artilleria.ru."
+};
+
 const menuToggle = document.querySelector(".menu-toggle");
 const siteNav = document.querySelector("#site-nav");
 
 menuToggle.addEventListener("click", () => {
   const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
   menuToggle.setAttribute("aria-expanded", String(!isOpen));
-  menuToggle.setAttribute("aria-label", isOpen ? "Открыть меню" : "Закрыть меню");
+  menuToggle.setAttribute("aria-label", isOpen ? formCopy.openMenu : formCopy.closeMenu);
   siteNav.classList.toggle("is-open", !isOpen);
 });
 
 siteNav.addEventListener("click", (event) => {
   if (event.target.closest("a")) {
     menuToggle.setAttribute("aria-expanded", "false");
-    menuToggle.setAttribute("aria-label", "Открыть меню");
+    menuToggle.setAttribute("aria-label", formCopy.openMenu);
     siteNav.classList.remove("is-open");
   }
 });
@@ -27,16 +42,16 @@ contactForm.addEventListener("submit", (event) => {
   event.preventDefault();
 
   const message = projectMessage.value.trim();
-  projectMessage.setCustomValidity(message ? "" : "Коротко опишите вашу задачу.");
+  projectMessage.setCustomValidity(message ? "" : formCopy.required);
   if (!contactForm.reportValidity() || !projectConsent.checked) return;
 
-  const subject = encodeURIComponent("Заявка с сайта «Артиллерия»");
+  const subject = encodeURIComponent(formCopy.subject);
   const body = encodeURIComponent([
     message,
-    "Даю ИП Русакову Дмитрию Николаевичу согласие на обработку моих персональных данных для ответа на это обращение (редакция 1): https://bezsporov-maker.github.io/artilleria/consent.html",
+    formCopy.consent,
   ].join("\r\n\r\n"));
 
-  formStatus.textContent = "Если почтовое приложение не открылось, напишите на d.rusakov@artilleria.ru.";
+  formStatus.textContent = formCopy.fallback;
   formStatus.hidden = false;
   window.location.href = `mailto:d.rusakov@artilleria.ru?subject=${subject}&body=${body}`;
 });
