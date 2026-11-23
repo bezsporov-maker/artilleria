@@ -1,5 +1,12 @@
 const isEnglish = document.documentElement.lang === "en";
-const formCopy = isEnglish ? {
+const isArabic = document.documentElement.lang === "ar";
+const formCopy = isArabic ? {
+  openMenu: "فتح القائمة", closeMenu: "إغلاق القائمة",
+  required: "يرجى وصف مشروعك بإيجاز.",
+  subject: "استفسار عن مشروع من موقع أرتيليريا",
+  consent: "أوافق على معالجة بياناتي الشخصية من قبل رائد الأعمال الفردي دميتري نيكولايفيتش روساكوف للرد على هذا الاستفسار (الإصدار 1): https://bezsporov-maker.github.io/artilleria/ar/consent.html",
+  fallback: "إذا لم يفتح تطبيق البريد الإلكتروني، راسلنا على d.rusakov@artilleria.ru."
+} : isEnglish ? {
   openMenu: "Open menu", closeMenu: "Close menu",
   required: "Please briefly describe your project.",
   subject: "Project enquiry from the Artilleria website",
@@ -74,7 +81,7 @@ try {
 }
 
 function analyticsEnabled() {
-  return analyticsChoice === "allow" || (isEnglish && analyticsChoice !== "reject");
+  return analyticsChoice === "allow" || ((isEnglish || isArabic) && analyticsChoice !== "reject");
 }
 
 function startAnalytics() {

@@ -1720,3 +1720,36 @@ html[lang="en"] .contact h2 { font-size: calc(clamp(40px, 4.7vw, 64px) * var(--f
   .language-switch { margin-left: auto; margin-right: 18px; }
   html[lang="en"] .hero h1 { font-size: calc(clamp(42px, 11vw, 60px) * var(--font-scale)); }
 }
+
+/* Arabic typography and bidirectional content. */
+html[lang="ar"] { --font: "Tahoma", "Arial", sans-serif; }
+html[lang="ar"] body { line-height: 1.8; }
+html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3 { line-height: 1.35; letter-spacing: 0; }
+html[lang="ar"] .eyebrow, html[lang="ar"] .target-label, html[lang="ar"] .service-number,
+html[lang="ar"] .case-topline, html[lang="ar"] .case-category, html[lang="ar"] .case-visual-caption,
+html[lang="ar"] .channels-title { letter-spacing: 0; }
+html[lang="ar"] .hero h1 { font-size: calc(clamp(48px, 5.4vw, 76px) * var(--font-scale)); }
+html[lang="ar"] .contact h2 { font-size: calc(clamp(38px, 4.5vw, 60px) * var(--font-scale)); }
+html[lang="ar"] .hero-art { direction: ltr; }
+html[lang="ar"] .hero-note span { margin-left: 5px; margin-right: 0; }
+html[lang="ar"] .language-switch { margin-left: 28px; margin-right: auto; direction: ltr; }
+html[lang="ar"] .service-icon { right: auto; left: 19px; }
+html[lang="ar"] .service-card { border-inline: 1px solid var(--line); }
+html[lang="ar"] .case-visual-number, html[lang="ar"] .case-metrics strong,
+html[lang="ar"] .step-number, html[lang="ar"] .channel-hint,
+html[lang="ar"] .channel-mail a { direction: ltr; unicode-bidi: isolate; }
+html[lang="ar"] .channel-hint { text-align: left; }
+html[lang="ar"] .channel-arrow { text-align: left; }
+html[lang="ar"] .legal-page { text-align: right; }
+html[lang="ar"] .legal-page a[href^="mailto:"] { direction: ltr; unicode-bidi: isolate; }
+html[lang="ar"] textarea { text-align: start; }
+@media (max-width: 900px) {
+  .language-switch { gap: 8px; margin-right: 16px; font-size: calc(11px * var(--font-scale)); }
+  .site-nav { gap: 10px; }
+  .brand { flex-shrink: 0; }
+  html[lang="ar"] .language-switch { margin-left: 16px; margin-right: auto; }
+}
+@media (max-width: 640px) {
+  html[lang="ar"] .hero h1 { font-size: calc(clamp(42px, 11vw, 60px) * var(--font-scale)); }
+  html[lang="ar"] .language-switch { margin-left: 18px; margin-right: auto; }
+}
