@@ -85,6 +85,8 @@ a {
   width: 143px;
   height: 100%;
   align-items: center;
+  flex-shrink: 0;
+  overflow: hidden;
 }
 
 .brand img {
@@ -92,6 +94,7 @@ a {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transform: scale(1.8);
 }
 
 .site-nav {
