@@ -9,7 +9,14 @@ const form = document.querySelector('#lead-form');
 const result = document.querySelector('#result');
 const success = document.querySelector('.success');
 const context = document.querySelector('#request-context');
+const mobileRequest = document.querySelector('.mobile-actions [data-request]');
+const mobileTopics = {
+  repair: ['Ремонт техники', 'Оставить заявку'],
+  parts: ['Подбор запчастей', 'Узнать наличие'],
+  rent: ['Аренда МУП-351', 'Уточнить даты']
+};
 let subject = 'Ремонт техники';
+const drafts = new Map();
 let pending = false;
 let trigger;
 
@@ -31,6 +38,9 @@ document.addEventListener('click', event => {
 
 function showPanel(id) {
   const chosen = tabs.find(tab => tab.dataset.tab === id) || tabs[0];
+  const [topic, action] = mobileTopics[chosen.dataset.tab];
+  mobileRequest.dataset.request = topic;
+  mobileRequest.textContent = action;
   tabs.forEach((tab, i) => {
     const active = tab === chosen;
     tab.classList.toggle('active', active);
@@ -58,7 +68,7 @@ tabs.forEach(tab => {
   tab.addEventListener('click', event => {
     event.preventDefault();
     showPanel(tab.dataset.tab);
-    history.replaceState(null, '', '#' + tab.dataset.tab);
+    if (location.hash !== tab.hash) history.pushState(null, '', tab.hash);
   });
 });
 navigation.addEventListener('click', event => {
@@ -76,17 +86,32 @@ showPanel(location.hash.slice(1));
 window.addEventListener('hashchange', readHash);
 
 function setRequest(topic) {
+  const description = form.elements['our-message'];
+  const photo = form.elements.uploadfile;
+  if (topic !== subject) {
+    drafts.set(subject, {message: description.value, photos: photo.files});
+    const draft = drafts.get(topic);
+    description.value = draft?.message || '';
+    if (draft?.photos.length) photo.files = draft.photos;
+    else photo.value = '';
+    photo.dispatchEvent(new Event('change'));
+    form.elements['acceptance-875'].checked = false;
+  }
   subject = topic;
   context.textContent = topic;
-  const description = form.elements['our-message'];
+  const rental = topic.startsWith('Аренда');
+  for (const field of [form.elements.dropdown, form.elements.uploadfile]) {
+    field.disabled = rental;
+    field.closest('label').hidden = rental;
+  }
   let label = 'Что случилось?';
-  let placeholder = 'Например, МТЗ-82, перестала включаться передача';
+  let placeholder = 'Например, на МТЗ-82 не включается вторая передача';
   if (topic === 'Подбор запчастей') {
     label = 'Какая деталь нужна?';
     placeholder = 'Модель техники, название детали или артикул';
-  } else if (topic.startsWith('Аренда')) {
-    label = 'Для каких работ нужен трактор?';
-    placeholder = 'Адрес объекта, даты и навесное оборудование';
+  } else if (rental) {
+    label = 'Где и когда нужен трактор?';
+    placeholder = 'Например, 12 декабря нужен трактор со щёткой в Котельниках';
   } else if (topic === 'Выезд мастера') {
     label = 'Где находится техника и что произошло?';
     placeholder = 'Адрес объекта, модель и признаки неисправности';
@@ -101,7 +126,11 @@ document.addEventListener('click', event => {
   event.preventDefault();
   trigger = link;
   if (!pending) {
-    if (!success.hidden) form.reset();
+    if (!success.hidden) {
+      form.reset();
+      drafts.clear();
+      subject = link.dataset.request;
+    }
     form.hidden = false;
     success.hidden = true;
     result.replaceChildren();
@@ -141,15 +170,18 @@ function showFallback(uncertain) {
   tel.textContent = '+7 (495) 143-17-23';
   const mail = document.createElement('a');
   mail.textContent = 'напишите по почте';
-  const details = [form.elements['our-message'].value, form.elements.dropdown.value, form.elements['your-name'].value, phone.value].filter(Boolean).join('\n');
+  const model = form.elements.dropdown;
+  const details = [form.elements['our-message'].value, model.disabled ? '' : model.value, form.elements['your-name'].value, phone.value].filter(Boolean).join('\n');
   mail.href = 'mailto:89771314213@mail.ru?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(details);
   result.append(tel, ' или ', mail, '.');
 }
 form.addEventListener('submit', async event => {
   event.preventDefault();
   if (pending) return;
-  const num = phone.value.replace(/\D/g, '');
-  phone.setCustomValidity(num.length >= 10 && num.length <= 15 ? '' : 'Проверьте номер телефона с кодом города или оператора.');
+  const number = phone.value.trim();
+  const digits = number.replace(/\D/g, '');
+  const validPhone = /^\+?[\d\s()-]+$/.test(number) && digits.length >= 10 && digits.length <= 15;
+  phone.setCustomValidity(validPhone ? '' : 'Введите номер с кодом города или оператора, например +7 999 123 45 67.');
   if (!form.reportValidity()) return;
   const payload = new FormData(form);
   if (!file.files.length) payload.delete('uploadfile');
